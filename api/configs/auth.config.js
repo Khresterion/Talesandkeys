@@ -6,6 +6,7 @@ const config = {
         "/test/admin" : (user) => user.role === 2,
         "/test/account/*" : (user,params) => user.role > user.role > 0 && user.id == params.id,
         "/auth/login/" : (user) => user.role ===0 ,
+        "/auth/register/" : (user) => user.role ===0 ,
         // "/auth/User" : (user) => user.role === 1,
         // "/auth/Admin" : (user) => user.role === 2,
         // "/auth/Account" : (user) => user.role > 0, //&& user.id == params.id,

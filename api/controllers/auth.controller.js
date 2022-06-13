@@ -8,9 +8,9 @@ const authconfig = require("../configs/auth.config");
 
 class AuthController extends BaseController {
 
-    getUser = async(email) =>{
+    getUser = async(mail) =>{
         const service = new UserService();
-        const users = await service.select({where:`email = '${email}'`});
+        const users = await service.select({where:`mail = '${mail}'`});
         return users.length === 1 ? users.pop(): null;
     }
 
@@ -18,17 +18,17 @@ class AuthController extends BaseController {
     login = async (req) => {
         const service = new UserService();
         const results = await service.select({
-           where: `email = '${req.body.email} '` ,
+           where: `mail = '${req.body.mail} '` ,
         });
-        const user = results.length === 1 ? results.pop() : null;
+        const appuser = results.length === 1 ? results.pop() : null;
         let m = bcrypt.hashSync('test',8);
         console.log(m);
-        if(user){
+        if(!appuser){
             console.log('req', req.body.password);
-            const result = await bcrypt.compare(req.body.password, `${HASH_PREFIX + user.mdp}`);
+            const result = await bcrypt.compare(req.body.password, `${HASH_PREFIX + appuser.password}`);
             if (result){
-                const token = jwt.sign({id: user.Id_user, email: user.email, role: user.role},JWT_SECRET,{ expiresIn: "1d"}); //dans react sub
-                let response = {id:user.Id_user, email: user.email, role: user.role, token:token, result: true,message: "bienvenue !"};
+                const token = jwt.sign({id: appuser.id_app_user, mail: appuser.mail}, /*password: appuser.password},*/JWT_SECRET,{ expiresIn: "1d"}); //dans react sub
+                let response = {id: appuser.id_app_user, mail: appuser.mail, /*password: appuser.password*/ token:token, result: true,message: "bienvenue !"};
                 console.log(response);
                 return response
             }
@@ -49,14 +49,14 @@ class AuthController extends BaseController {
             return {result: false, message: "payload incorrect !"};
         }
         if (payload){
-            let user = {
+            let appuser = {
                 'id':payload.id,
-                'email':payload.email,
-                'role':payload.role
+                'mail':payload.mail,
+                'password':payload.password
             }
-            console.log(user);
-            if(user){
-                return user
+            console.log(appuser);
+            if(appuser){
+                return appuser
             }
             else{
                 return {result: false, message: "payload incorrect3 !"};
@@ -67,21 +67,21 @@ class AuthController extends BaseController {
 
     }
     register = async (req) => {
-        // return "register";
+         //return "register";
         if(req.method !== 'POST') return {status:405};
         
-        const user = await this.getUser(req.body.email);
-        if(!user){
-            const payload = {mail:req.body.email,role:1,password:req.body.password1};
+        const appuser = await this.getUser(req.body.mail);
+        if(!appuser){
+            const payload = {mail:req.body.mail,password:req.body.password};
             const token = jwt.sign(payload, authconfig.JWT_SECRET, { expiresIn: '1d'});
 
-            const html = 
+         const html = 
             `
 
-            <b>Confirmez votre Inscription : </b>
-            <a href="http://localhost:3000/RegisterValidation?t=${encodeURIComponent(token)}" target="_blank">Confirmer</a>
-            `;
-            await MailerService.sendMail({to: req.body.email, subject:"Confirmer votre inscription", html});
+              <b>Confirmez votre Inscription : </b>
+              <a href="http://localhost:3000/RegisterValidation?t=${encodeURIComponent(token)}" target="_blank">Confirmer</a>
+              `;
+             await MailerService.sendMail({to: req.body.mail, subject:"Confirmer votre inscription", html});
             return true;
         }
         return false;
@@ -100,7 +100,7 @@ class AuthController extends BaseController {
         if(payload){
             const service = new UserService();
             const password = (await bcrypt.hash(payload.password,8)).replace(authconfig.HASH_PREFIX,'');
-            const user = await service.insertUser({email:payload.mail, mdp:password, role:''+payload.role});
+            const user = await service.insertUser({mail:payload.mail, password:password,});
             return user ?
                 {data:{completed:true, message:"Bienvenu sur Family Cuisine, votre compte a bien etais activé, vous pouvez vous connecter"}} :
                 {data:{completed:false, message:"Une erreur est survenue ...."}} ;
@@ -124,10 +124,10 @@ class AuthController extends BaseController {
         
             const token = req.body.token;
             let payload
-            let user
+            let appuser
             try{
               payload = jwt.verify(token,authconfig.JWT_SECRET);
-              user = await this.getUser(payload.mail);
+              appuser = await this.getappuser(payload.mail);
             }
             catch{
               return {data:{completed:false, message:"Désolé une erreur est survenue ..."}};
@@ -135,7 +135,7 @@ class AuthController extends BaseController {
             if(payload){
               const usermodify = new UserService();
               const password = (await bcrypt.hash(req.body.password1,8)).replace(authconfig.HASH_PREFIX,'');
-              const rows = await usermodify.updateUser({where : user.Id_user ,mdp:password});
+              const rows = await usermodify.updateappser({where : appuser.id_app_user ,password:password});
             return true;
           }
           
@@ -147,9 +147,9 @@ class AuthController extends BaseController {
     renewmail = async (req) =>{
         if(req.method !== 'POST') return {status:405};
         
-        const user = await this.getUser(req.body.email);
-        if(user){
-          const payload = {mail: req.body.email};
+        const appuser = await this.getappuser(req.body.mail);
+        if(appuser){
+          const payload = {mail: req.body.mail};
           const token = jwt.sign(payload, authconfig.JWT_SECRET, { expiresIn: '1d'});
           const html = 
           `
@@ -157,8 +157,8 @@ class AuthController extends BaseController {
           <a href="http://localhost:3000/RenewPassword2?t=${encodeURIComponent(token)}" target="_blank">Confirmer</a>
           
           `;
-          await MailerService.sendMail({to: req.body.email, subject:"Confirmer votre inscription", html});
-            return true;
+        //   await MailerService.sendMail({to: req.body.mail, subject:"Confirmer votre inscription", html});
+        //     return true;
         }
         return false;
     
