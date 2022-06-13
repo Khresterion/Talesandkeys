@@ -3,7 +3,7 @@
     PORT:"3306",
     USER:"root",
     PASS:"",
-    NAME:"family_cuisine" 
+    NAME:" t_k_bdd" 
   };
   
   module.exports = config;
