@@ -1,5 +1,5 @@
 const BaseController = require("./base.controller");
-const UserService = require("../services/user.service");
+const UserService = require("../services/appuser.service");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET , HASH_PREFIX } = require("../configs/auth.config");
 const jwt = require("jsonwebtoken");
@@ -72,7 +72,7 @@ class AuthController extends BaseController {
         
         const appuser = await this.getUser(req.body.mail);
         if(!appuser){
-            const payload = {mail:req.body.mail,password:req.body.password};
+            const payload = {mail:req.body.mail,password:req.body.password,pseudo:req.body.pseudo};
             const token = jwt.sign(payload, authconfig.JWT_SECRET, { expiresIn: '1d'});
 
          const html = 
@@ -100,7 +100,7 @@ class AuthController extends BaseController {
         if(payload){
             const service = new UserService();
             const password = (await bcrypt.hash(payload.password,8)).replace(authconfig.HASH_PREFIX,'');
-            const user = await service.insertUser({mail:payload.mail, password:password,});
+            const user = await service.insertUser({mail:payload.mail, password:password,pseudo:payload.pseudo});
             return user ?
                 {data:{completed:true, message:"Bienvenu sur Family Cuisine, votre compte a bien etais activé, vous pouvez vous connecter"}} :
                 {data:{completed:false, message:"Une erreur est survenue ...."}} ;
