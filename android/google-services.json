@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1015285680554",
+    "project_id": "talesandkeys-4f5c6",
+    "storage_bucket": "talesandkeys-4f5c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015285680554:android:395dfcf617609c409443d3",
+        "android_client_info": {
+          "package_name": "com.example.talesandkeys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015285680554-dh2jv5b5ok02fk7bgqt02jbutmqrkqh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgI76Dgke60w7YiPELzg5uq9AsBUpWmBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015285680554-dh2jv5b5ok02fk7bgqt02jbutmqrkqh7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1015285680554-ek03spscid9ueegmjk3gv9kpfi1kpc0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.talesandkeys"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
