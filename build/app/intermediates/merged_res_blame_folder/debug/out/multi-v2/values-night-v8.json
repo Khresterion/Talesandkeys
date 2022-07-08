@@ -4,7 +4,7 @@
             "outputFile": "com.example.talesandkeys.app-mergeDebugResources-14:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\maman\\OneDrive\\Bureau\\talesandkeys\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "/Users/maximelebon/Desktop/Dev/flutterapp/tk/Talesandkeys/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

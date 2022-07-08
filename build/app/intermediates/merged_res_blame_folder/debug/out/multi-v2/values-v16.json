@@ -4,7 +4,7 @@
             "outputFile": "com.example.talesandkeys.app-mergeDebugResources-14:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\maman\\.gradle\\caches\\transforms-3\\46b27a55403b046e4eac6cd34cce18b6\\transformed\\core-1.6.0\\res\\values-v16\\values-v16.xml",
+                    "source": "/Users/maximelebon/.gradle/caches/transforms-3/46b27a55403b046e4eac6cd34cce18b6/transformed/core-1.6.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
